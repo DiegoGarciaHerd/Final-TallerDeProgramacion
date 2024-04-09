@@ -1,0 +1,107 @@
+programa ejercicio1 
+procesos 
+  proceso depositarEsquina(E avenida:numero; E calle:numero; E N:numero)
+  comenzar
+    BloquearEsquina(calle,avenida)
+        Pos(calle,avenida)
+        repetir N 
+          depositarFlor 
+        Pos(100,100)
+        LiberarEsquina(calle,avenida)
+areas 
+  areaServidor : AreaP(100, 100, 100, 100)
+  area1 : AreaPC(1, 1, 1, 100)
+  area2  : AreaPC(2, 1, 2, 100)
+  area3 : AreaPC(3, 1, 3, 100)
+robots 
+  robot servidor 
+  variables
+    terminados : numero
+    id : numero
+    N : numero
+    avenida: numero
+    calle: numero
+  comenzar 
+    terminados:=0
+    mientras(terminados < 3 )
+      RecibirMensaje(id,*)
+      si id = 1
+        RecibirMensaje(N,cliente1)
+        si N = 0
+          terminados:=terminados + 1
+        sino     
+          RecibirMensaje(avenida,cliente1)
+          RecibirMensaje(calle,cliente1)
+          depositarEsquina(calle,avenida,N)
+          EnviarMensaje(0,cliente1)
+      sino 
+        si id = 2 
+          RecibirMensaje(N,cliente2)
+          si N = 0
+            terminados:=terminados + 1
+          sino
+            RecibirMensaje(avenida,cliente2)
+            RecibirMensaje(calle,cliente2)
+            depositarEsquina(calle,avenida,N)
+            EnviarMensaje(0,cliente2)
+        sino 
+          si id = 3
+            RecibirMensaje(N,cliente3)
+            si N = 0
+              terminados:=terminados + 1
+            sino
+              RecibirMensaje(avenida,cliente3)
+              RecibirMensaje(calle,cliente3)
+              depositarEsquina(calle,avenida,N)
+              EnviarMensaje(0,cliente3)
+  fin 
+
+  robot cliente 
+  variables
+    id:numero flores:numero
+    sigAv:numero sigCa:numero
+    ACK:numero preCa:numero
+    preAv:numero
+  comenzar
+    id:=PosAv
+    mientras PosCa< 100
+      EnviarMensaje(id,robotServidor)   
+      Random(flores,1,4)
+      EnviarMensaje(flores,robotServidor)
+      sigAv:=PosAv
+      sigCa:=PosCa + 1
+      EnviarMensaje(sigAv,robotServidor)
+      EnviarMensaje(sigCa,robotServidor)
+      RecibirMensaje(ACK,robotServidor)
+      Pos(sigAv, sigCa)
+      preAv := PosAv
+      preCa := PosCa
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+      Pos(preAv, preCa)
+      mientras (HayFlorEnLaBolsa) & (PosCa < 100)
+        si ~(HayFlorEnLaEsquina)
+          depositarFlor
+        mover
+      si PosCa = 100
+        EnviarMensaje(id, robotServidor)
+        EnviarMensaje(0, robotServidor)
+    fin
+variables
+  robotServidor : servidor
+  cliente1 : cliente
+  cliente2 : cliente
+  cliente3 : cliente
+comenzar
+  AsignarArea(robotServidor, areaServidor)
+  AsignarArea(robotServidor, area1)
+  AsignarArea(robotServidor, area2)
+  AsignarArea(robotServidor, area3)
+  AsignarArea(cliente1, area1)
+  AsignarArea(cliente2, area2)
+  AsignarArea(cliente3, area3)
+  Iniciar(robotServidor, 100, 100)
+  Iniciar(cliente1, 1, 1)
+  Iniciar(cliente2, 2, 1)
+  Iniciar(cliente3, 3, 1)
+fin

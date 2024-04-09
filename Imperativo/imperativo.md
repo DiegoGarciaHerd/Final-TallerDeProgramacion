@@ -5,7 +5,7 @@
 ## Indice
 * [Ordenacion](#Ordenacion)
 * [Arboles](#Arboles)
-
+* [Merge](#Merge)
 Ordenacion 
 === 
 ---
@@ -224,4 +224,123 @@ begin
     end;
     entreRango:=cant;
 end;
+```
+
+Merge
+===
+
+* La operación de merge consiste en generar una nueva estructura de datos (arreglos, listas) ordenada a partir de la mezcla de dos o más estructuras de datos previamente ordenadas. 
+
+## Entre 2 listas
+
+```Pascal
+
+procedure merge(l1,l2:lista; nueva:lista);
+
+begin
+    nueva:=nil // SIEMPRE inicializa la nueva estructura
+    minimo(l1,l2,min)
+    while(min.cod<>-1)do begin 
+        agregarAtras(nueva,min);
+        minimo(l1,l2,min);
+    end;
+end;
+
+procedure minimo(l1,l2:lista; min:t_dato)
+begin
+    min := ‘ZZZ’;
+      if (e1 <> nil) and (e2 <> nil)then
+           if (e1^.dato <= e2 ^.dato ) then 
+             begin
+               min:= e1^.dato;
+               e1:= e1 ^.sig; 
+             end; 
+           else begin
+             min:= e2 ^.dato;
+             e2:= e2 ^.sig;
+           end 
+      else 
+        if (e1 <> nil) and (e2 = nil) then begin
+          min:= e1^.dato;
+          e1:= e1 ^.sig;
+        end 
+        else 
+          if (e1 = nil) and (e2 <> nil) then begin
+             min:= e2 ^.dato;
+             e2:= e2 ^.sig; 
+          end;
+    end;
+end;
+
+```
+
+## Vector de listas
+
+```Pascal
+procedure merge(var v:vector; nueva:lista);
+begin
+    nueva:=nil;
+    minimo(v,min)
+    while(min.cod<>-1)do begin 
+      agregarAtras(v,min);
+      minimo(v,min);
+    end;
+end;
+```
+
+
+procedure minimo(v:vector; min:t_dato);
+var 
+    i:integer;
+begin 
+    min.cod:=-1;
+    for i:=1 to DIMF do begin 
+        if(v[i]<>nil)and(v[i]^.dato.cod < min)then begin 
+            min:=v[i]^.dato.cod;
+            indice:=i;
+        end;
+    end;
+
+    if(min.cod<> -1)then begin 
+        v[indice]:=v[indice]^.sig;
+    end;
+end;
+```
+
+## Merge Acumulador
+
+```Pascal
+
+procedure merge(v:vector; var nueva:lista);
+begin 
+    l:=nil;
+    minimo(v,min,monto)
+    while(min.cod<>-1)do begin 
+        actual:=min.cod;
+        montoTotal:=0;
+        while(min.cod<>-1)and(actual=min.cod)do begin 
+            montoTotal:=montoTotal + monto;
+            minimo(v,min,monto);
+        end;
+        agregarAtras(l,min,montoTotal);
+    end;
+end;
+
+procedure minimo(v:vector; var min:t_dato; var montoMin:integer);
+begin 
+    min.cod:=-1;
+    for i:=1 to DIMF do begin
+      if(v[i]<>nil)then 
+        if(v[i]^.dato.cod<=min.cod)then begin 
+            min:=v[i]^.dato;
+            indice:=i;
+        end;
+    end;
+
+    if(min.cod<>-1)then begin 
+        v[indice]:= v[indice]^.sig;
+        montoMin:=v[indice]^.dato.monto;
+    end;
+end;
+
 ```

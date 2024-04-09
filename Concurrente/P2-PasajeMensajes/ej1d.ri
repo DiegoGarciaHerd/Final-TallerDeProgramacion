@@ -1,0 +1,100 @@
+{d. Modifique el inciso anterior para que ahora el fiscalizador informe también, cuál
+fue el robot ganador}
+
+programa ejercicioD
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+  fin
+  proceso recorrerAvenida(ES flores:numero)
+  comenzar
+    repetir 9
+      juntarFlores(flores)
+      mover 
+    juntarFlores(flores)
+  fin
+areas
+  area1: AreaP(1,1,1,10)
+  area2: AreaP(2,11,2,20)
+  area3: AreaP(3,21,3,30)
+  area4: AreaP(4,31,4,40)
+  area5: AreaP(5,41,5,50)
+  area6: AreaP(6,51,6,60)
+  areaFiscalizador: AreaP(2,1,2,1)
+robots 
+  robot recolector
+  variables
+    flores:numero
+    id:numero
+  comenzar 
+    RecibirMensaje(id,fiscalizador)
+    flores:=0
+    recorrerAvenida(flores)
+    EnviarMensaje(id,fiscalizador)
+    EnviarMensaje(flores,fiscalizador)
+  fin 
+  robot fiscalizador
+  variables
+    max:numero flores:numero
+    id:numero idMax:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    EnviarMensaje(5,r5)
+    EnviarMensaje(6,r6)
+    max:=0
+    idMax:=0
+    repetir 6
+      RecibirMensaje(id,*)
+      si id = 1
+        RecibirMensaje(flores,r1)
+      sino 
+        si id = 2
+          RecibirMensaje(flores,r2)
+        sino 
+          si id = 3
+            RecibirMensaje(flores,r3)  
+          sino 
+            si id = 4
+              RecibirMensaje(flores,r4)
+            sino
+              si id = 5
+                RecibirMensaje(flores,r5)
+              sino 
+                si id = 6
+                  RecibirMensaje(flores,r6)
+      si(max<flores)
+        max:=flores
+        idMax:=id 
+    Informar(idMax)
+    Informar(flores)    
+  fin 
+variables
+  r1:recolector
+  r2:recolector 
+  r3:recolector 
+  r4:recolectar 
+  r5:recolectar 
+  r6:recolector
+  jefe:fiscalizador
+comenzar
+  AsignarArea(jefe,areaFiscalizador)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area3)
+  AsignarArea(r4, area4)
+  AsignarArea(r5, area5)
+  AsignarArea(r6, area6)
+  Iniciar(jefe, 2, 1)
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 2, 11)
+  Iniciar(r3, 3, 21)
+  Iniciar(r4, 4, 31)
+  Iniciar(r5, 5, 41)
+  Iniciar(r6, 6, 51)
+fin 

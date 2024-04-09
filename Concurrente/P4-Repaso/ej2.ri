@@ -1,0 +1,108 @@
+programa ej2
+procesos
+  proceso dejarPapelesProductor
+  variables
+    preAv:numero preCa:numero
+  comenzar
+    preCa:=PosCa
+    preAv:=PosAv
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    mientras(HayPapelEnLaBolsa)
+      depositarPapel
+    Pos(preCa,posCa)
+    LiberarEsquina(50,50)
+  fin
+  proceso juntarPapeles
+  variables
+    papeles:numero preCa:numero preAv:numero
+  comenzar
+    papeles:=0
+    repetir 99
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        papeles := papeles + 1
+        si papeles = 5
+          dejarPapelesProductor
+          papeles := 0
+      mover
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:= papeles + 1
+      si papeles = 5
+        dejarPapelesProductor
+        papeles:=0
+  fin
+  proceso intentarConsumir(ES intento:boolean)
+  variables 
+    cant:numero
+  comenzar
+    Random(cant,2,5)
+    BloquearEsquina(50,50)
+    mientras(HayPapelEnLaEsquina)&(papeles<cant)
+      tomarPapel
+      papeles:=papeles+1
+    si(papeles = cant)
+      intento:=V;
+    sino
+      intento:=F;
+      mientras(HayPapelEnLaBolsa)
+        depositarPapel
+  fin 
+
+
+areas 
+  areaProductor1: AreaP(5,1,5,100)
+  areaProductor2: AreaP(10,1,10,100)
+
+  areaConsumidor1: AreaP(11,1,11,1)
+  areaConsumidor2: AreaP(12,1,12,1)
+
+  areaDeposito: AreaC(50,50,50,50)
+robots  
+  robot productor 
+  comenzar
+    juntarPapeles
+  fin 
+
+  robot consumidor 
+  variables
+    exito:boolean intentosFallidos:numero caInicio:numero avInicio:numero
+  comenzar
+    caInicio:=PosCa
+    avInicio:=PosAv
+    intentosFallidos:=0;
+    mientras(intentosFallidos<8)
+      intentarConsumir(exito)
+      Pos(caInicio,avInicio)
+      LiberarEsquina(50,50)
+      si exito 
+        mientras(HayPapelEnLaBolsa)
+          depositarPapel
+      sino 
+        intentosFallidos:=intentosFallidos + 1
+  fin 
+variables 
+  robotConsumidor1:consumidor;
+  robotConsumidor2:consumidor;
+  robotProductor1:productor;
+  robotProductor2:productor;
+comenzar
+  AsignarArea(robotProductor1,areaProductor1)
+  AsignarArea(robotProductor1,areaDeposito)
+
+  AsignarArea(robotProductor2,areaProductor2)
+  AsignarArea(robotProductor2,areaDeposito)
+  
+  AsignarArea(robotConsumidor1,areaConsumidor1)
+  AsignarArea(robotConsumidor1,areaDeposito)
+
+  AsignarArea(robotConsumidor2,areaConsumidor2)
+  AsignarArea(robotConsumidor2,areaDeposito)
+  
+  Iniciar(robotProductor1,5,1)
+  Iniciar(robotProductor2,10,1)
+
+  Iniciar(robotConsumidor1,11,1)
+  Iniciar(robotConsumidor2,12,1)
+fin 

@@ -1,0 +1,57 @@
+{1) Realice un programa para que un robot junte todas las flores de la avenida 1 y las
+deposite al final de dicha avenida. Al finalizar, debe informar la cantidad de flores
+depositadas y la cantidad de esquinas sin flores que encontró durante el recorrido.
+a) Modifique el programa anterior para que el mismo robot realice lo mismo en las
+avenidas 1, 3 y 5
+b) Modifique el programa anterior para que el trabajo sea realizado por 3 robots: uno
+realiza la avenida 1, otro realiza la avenida 3 y otro la avenida 5. Cada robot debe
+iniciar en las esquina (1,1), (3,1) y (5,1) respectivamente.}
+
+programa ej1
+
+procesos 
+    proceso juntarFlores
+    comenzar 
+        mientras(HayFlorEnLaEsquina)
+            tomarFlor
+    fin 
+    proceso juntarEsquina(ES vacias:numero)
+    comenzar 
+        si(HayFlorEnLaEsquina)
+            juntarFlores
+        sino 
+            vacias:=vacias+1
+    fin 
+
+    proceso recorrerAvenida
+    variables 
+        flores:numero esquinasVacias:numero
+    comenzar
+        repetir 3
+            derecha
+        repetir 99 
+            juntarEsquina(esquinasVacias)
+        mientras(HayFlorEnLaBolsa)
+            depositarFlor
+            flores:=flores+1
+        informar(flores)
+        informar(esquinasVacias)
+    fin
+areas 
+    ciudad: AreaC(1,1,100,100)
+robots 
+    robot tipo1
+        comenzar 
+            recorrerAvenida
+        fin
+variables
+    r1:tipo1 r2:tipo1 r3:tipo1
+comenzar
+    AsignarArea(r1,ciudad)
+    AsignarArea(r2,ciudad)
+    AsignarArea(r3,ciudad)
+
+    Iniciar(r1,1,1)
+    Iniciar(r2,3,1)
+    Iniciar(r4,5,1)
+fin

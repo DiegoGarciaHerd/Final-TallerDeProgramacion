@@ -1,0 +1,25 @@
+programa ejercicio4
+
+
+areas 
+  areaJefe: AreaP(1,1,1,1)
+  cuandrante: AreaP(2,2,100,100)
+  area1: AreaP(2,1,2,1)
+  area2: AreaP(3,1,3,1)
+robots 
+  robot jefe 
+
+
+  comenzar 
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    repetir 10
+      Random(id,1,2)
+      Random(Av,2,100)
+      Random(Ca,2,100)
+      Random(tarea,1,4)
+      si id = 1
+        EnviarMensaje(tarea,r1)
+        EnviarMensaje(Av,r1)
+        EnviarMensaje(Ca,r1)
+      
