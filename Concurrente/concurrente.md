@@ -481,20 +481,3 @@ comenzar
 fin 
 ```
 
-```Pascal
-
-procedure minimo(v:vector; min:t_dato);
-var 
-    i:integer;
-begin 
-    min.cod:=-1;
-    for i:=1 to DIMF do begin 
-        if(v[i]^.dato.cod < min)then begin 
-            min:=v[i]^.dato.cod;
-            indice:=i;
-        end;
-    end;
-
-    if(min.cod<> -1)then begin 
-        v[indice]:=v[indice]^.sig;
-        
